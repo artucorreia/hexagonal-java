@@ -1,5 +1,6 @@
-package com.example.hexagonal.adapters.out.repository;
+package com.example.hexagonal.adapters.out;
 
+import com.example.hexagonal.adapters.out.repository.CustomerRepository;
 import com.example.hexagonal.adapters.out.repository.entity.CustomerEntity;
 import com.example.hexagonal.adapters.out.repository.mapper.CustomerMapper;
 import com.example.hexagonal.application.core.domain.Customer;

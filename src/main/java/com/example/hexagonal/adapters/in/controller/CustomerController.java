@@ -4,6 +4,7 @@ import com.example.hexagonal.adapters.in.controller.mapper.CustomerMapper;
 import com.example.hexagonal.adapters.in.controller.request.CustomerRequest;
 import com.example.hexagonal.adapters.in.controller.response.CustomerResponse;
 import com.example.hexagonal.application.core.domain.Customer;
+import com.example.hexagonal.application.ports.in.DeleteCustomerByIdInputPort;
 import com.example.hexagonal.application.ports.in.FindCustomerByIdInputPort;
 import com.example.hexagonal.application.ports.in.InsertCustomerInputPort;
 import com.example.hexagonal.application.ports.in.UpdateCustomerInputPort;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +28,7 @@ public class CustomerController {
   private final FindCustomerByIdInputPort findCustomerByIdInputPort;
   private final InsertCustomerInputPort insertCustomerInputPort;
   private final UpdateCustomerInputPort updateCustomerInputPort;
-
+  private final DeleteCustomerByIdInputPort deleteCustomerByIdInputPort;
   private final CustomerMapper customerMapper;
 
   @Autowired
@@ -34,10 +36,12 @@ public class CustomerController {
       FindCustomerByIdInputPort findCustomerByIdInputPort,
       InsertCustomerInputPort insertCustomerInputPort,
       UpdateCustomerInputPort updateCustomerInputPort,
+      DeleteCustomerByIdInputPort deleteCustomerByIdInputPort,
       CustomerMapper customerMapper) {
     this.findCustomerByIdInputPort = findCustomerByIdInputPort;
     this.insertCustomerInputPort = insertCustomerInputPort;
     this.updateCustomerInputPort = updateCustomerInputPort;
+    this.deleteCustomerByIdInputPort = deleteCustomerByIdInputPort;
     this.customerMapper = customerMapper;
   }
 
@@ -67,5 +71,11 @@ public class CustomerController {
     customer.setId(id);
     updateCustomerInputPort.update(customer, customerRequest.getZipCode());
     return ResponseEntity.ok().build();
+  }
+
+  @DeleteMapping(value = "/{id}")
+  public ResponseEntity<Void> delete(@PathVariable String id) {
+    deleteCustomerByIdInputPort.delete(id);
+    return ResponseEntity.noContent().build();
   }
 }
